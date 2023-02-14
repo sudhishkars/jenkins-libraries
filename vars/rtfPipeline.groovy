@@ -93,7 +93,7 @@ def call(Map pipelineParams) {
 
         steps {
           script {            
-            sh "mvn -s ${MAVEN_SETTINGS_XML} -B -U mule:deploy -Dmule.artifact=myArtifact.jar -Dmule.app.name=appName"
+            sh "mvn -s ${MAVEN_SETTINGS_XML} -B -U mule:deploy -Dmule.artifact=myArtifact.jar -Dmule.app.name=${appName}"
           }
         }
       }

@@ -8,13 +8,6 @@ import groovy.transform.Field
 //     TRN: ["RTF-DC3-NON-PROD"]
 // ]
 
-@Field Map ACME_RTF_Mappings = [
-    dev1: ["os-rtf-1"]
-]
-
-@Field Map ACME1_RTF_Mappings = [
-    dev1: ["os-rtf-1"]
-]
 
 @Field Map portFolio_Env_Mappings = [
     ACME: [
