@@ -55,7 +55,7 @@ def call(Map pipelineParams) {
       IS_PRODUCTION = "false"
     }
 
-    def appName = "${pipelineParams.projectName}-${ANYPOINT_DEV}"
+    def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_DEV}"
 
     stages {
 
