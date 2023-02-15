@@ -13,8 +13,8 @@ def call(Map pipelineParams) {
       //Maven settings XML
       MAVEN_SETTINGS_XML=credentials('mvn-settings')
 
-      PORTFOLIO_NAME=${pipelineParams.portfolio}
-      PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}"   
+      // PORTFOLIO_NAME=${pipelineParams.portfolio}
+      // PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}"   
 
       CONNECTED_APP_CLIENT_ID = ${ANYPOINT_CONNECTED_APP_CREDENTIALS.USER}
       CONNECTED_APP_CLIENT_SECRET = ${ANYPOINT_CONNECTED_APP_CREDENTIALS.PSW}           
@@ -34,23 +34,23 @@ def call(Map pipelineParams) {
 
       // ANYPOINT_URL = mwDefauls.deployment_Params_Defaults.anypoint_url
 
-      ANYPOINT_URL = "https://anypoint.mulesoft.com"
-      MULE_VERSION =  "4.4.0"
-      RTF_PROVIDER = "MC"
-      SKIP_DEPLOY_VERIFY="false"
+      // ANYPOINT_URL = "https://anypoint.mulesoft.com"
+      // MULE_VERSION =  "4.4.0"
+      // RTF_PROVIDER = "MC"
+      // SKIP_DEPLOY_VERIFY="false"
 
-      ENFORCE_REPLICAS_ACROSS_NODES = "true"
-      UPDATESTRATEGY = "rolling"
-      CLUSTERED = "false"
-      FORWARD_SSL_SESSION = "false"
-      LAST_MILE_SECURITY = "false"
-      PERSISTENT_OBJECT_STORE = "false"
+      // ENFORCE_REPLICAS_ACROSS_NODES = "true"
+      // UPDATESTRATEGY = "rolling"
+      // CLUSTERED = "false"
+      // FORWARD_SSL_SESSION = "false"
+      // LAST_MILE_SECURITY = "false"
+      // PERSISTENT_OBJECT_STORE = "false"
 
-      RUN_TESTS = pipelineParams.runTests
-      IS_PRODUCTION = "false"
+      // RUN_TESTS = pipelineParams.runTests
+      // IS_PRODUCTION = "false"
     }
 
-    def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_DEV}"
+    //def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_DEV}"
 
     stages {
 
@@ -78,40 +78,40 @@ def call(Map pipelineParams) {
         }
       }
 
-      stage('Deploy to RTF Dev1') {
-        when {
-          allOf { 
-            expression { "${env.GIT_BRANCH}" == 'develop' }
-            expression { "${IS_PRODUCTION}" == 'false' }
-          }
-        }
-        environment {
-          MULE_ENV="dev1"
-          ANYPOINT_ENV=${MULE_ENV}
+      // stage('Deploy to RTF Dev1') {
+      //   when {
+      //     allOf { 
+      //       expression { "${env.GIT_BRANCH}" == 'develop' }
+      //       expression { "${IS_PRODUCTION}" == 'false' }
+      //     }
+      //   }
+      //   environment {
+      //     MULE_ENV="dev1"
+      //     ANYPOINT_ENV=${MULE_ENV}
 
-          PORTFOLIO_CREDENTIALS = credentials("${PORTFOLIO_NAME_LOWER}-anypoint-${MULE_ENV}")
+      //     PORTFOLIO_CREDENTIALS = credentials("${PORTFOLIO_NAME_LOWER}-anypoint-${MULE_ENV}")
 
-          SECRET_KEY=credentials("${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key")          
-          ANYPOINT_ENV_CLIENT_ID = ${PORTFOLIO_CREDENTIALS.USER}
-          ANYPOINT_ENV_CLIENT_SECRET = ${PORTFOLIO_CREDENTIALS.PSW} 
+      //     SECRET_KEY=credentials("${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key")          
+      //     ANYPOINT_ENV_CLIENT_ID = ${PORTFOLIO_CREDENTIALS.USER}
+      //     ANYPOINT_ENV_CLIENT_SECRET = ${PORTFOLIO_CREDENTIALS.PSW} 
 
-          RTF_CLUSTER_NAME = mwDefauls.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]["${MULE_ENV}"]
+      //     RTF_CLUSTER_NAME = mwDefauls.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]["${MULE_ENV}"]
 
-          CPU_RESERVED = mwDefaults.DEV1_Resource_Defaults.cpu_reserved
-          CPU_LIMIT = mwDefaults.DEV1_Resource_Defaults.cpu_limit
-          MEMORY_RESERVED = mwDefaults.DEV1_Resource_Defaults.memory_reserved
-          REPLICAS = mwDefaults.DEV1_Resource_Defaults.replicas
+      //     CPU_RESERVED = mwDefaults.DEV1_Resource_Defaults.cpu_reserved
+      //     CPU_LIMIT = mwDefaults.DEV1_Resource_Defaults.cpu_limit
+      //     MEMORY_RESERVED = mwDefaults.DEV1_Resource_Defaults.memory_reserved
+      //     REPLICAS = mwDefaults.DEV1_Resource_Defaults.replicas
 
-          SECRET_ENV_KEY = ${SECRET_KEY}                    
-        }
+      //     SECRET_ENV_KEY = ${SECRET_KEY}                    
+      //   }
 
-        steps {
-          script { 
-            print "App Name: " + appName         
-            sh "mvn -s ${MAVEN_SETTINGS_XML} -B -U mule:deploy -Dmule.artifact=myArtifact.jar -Dmule.app.name=${appName}"
-          }
-        }
-      }
+      //   steps {
+      //     script { 
+      //       print "App Name: " + appName         
+      //       sh "mvn -s ${MAVEN_SETTINGS_XML} -B -U mule:deploy -Dmule.artifact=myArtifact.jar -Dmule.app.name=${appName}"
+      //     }
+      //   }
+      // }
 
     }
   }
