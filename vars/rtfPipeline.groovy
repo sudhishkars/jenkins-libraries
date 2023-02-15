@@ -11,26 +11,40 @@ def call(Map pipelineParams) {
       ANYPOINT_CONNECTED_APP_CREDENTIALS = credentials("anypoint-deploy")
 
       //Maven settings XML
-      MAVEN_SETTINGS_XML = credentials('mvn-settings')
+      MAVEN_SETTINGS_XML=credentials('mvn-settings')
 
       PORTFOLIO_NAME=${pipelineParams.portfolio}
-      PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}"      
-
-      MULE_VERSION = mwDefaults.deployment_Params_Defaults.muleVersion
-      RTF_PROVIDER = mwDefaults.deployment_Params_Defaults.provider
-      SKIP_DEPLOY_VERIFY = mwDefaults.deployment_Params_Defaults.skipDeployVerification
+      PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}"   
 
       CONNECTED_APP_CLIENT_ID = ${ANYPOINT_CONNECTED_APP_CREDENTIALS.USER}
-      CONNECTED_APP_CLIENT_SECRET = ${ANYPOINT_CONNECTED_APP_CREDENTIALS.PSW}  
+      CONNECTED_APP_CLIENT_SECRET = ${ANYPOINT_CONNECTED_APP_CREDENTIALS.PSW}           
 
-      ENFORCE_REPLICAS_ACROSS_NODES = mwDefaults.deployment_Params_Defaults.enforceReplicasAcrossNodes
-      UPDATESTRATEGY = mwDefaults.deployment_Params_Defaults.updateStrategy
-      CLUSTERED = mwDefaults.deployment_Params_Defaults.clustered
-      FORWARD_SSL_SESSION = mwDefaults.deployment_Params_Defaults.forwardSSLSession
-      LAST_MILE_SECURITY = mwDefaults.deployment_Params_Defaults.lastMileSecurity
-      PERSISTENT_OBJECT_STORE = mwDefaults.deployment_Params_Defaults.persistentObjectStore
+      // MULE_VERSION = mwDefaults.deployment_Params_Defaults.muleVersion
+      // RTF_PROVIDER = mwDefaults.deployment_Params_Defaults.provider
+      // SKIP_DEPLOY_VERIFY = mwDefaults.deployment_Params_Defaults.skipDeployVerification
 
-      ANYPOINT_URL = mwDefauls.deployment_Params_Defaults.anypoint_url
+
+
+      // ENFORCE_REPLICAS_ACROSS_NODES = mwDefaults.deployment_Params_Defaults.enforceReplicasAcrossNodes
+      // UPDATESTRATEGY = mwDefaults.deployment_Params_Defaults.updateStrategy
+      // CLUSTERED = mwDefaults.deployment_Params_Defaults.clustered
+      // FORWARD_SSL_SESSION = mwDefaults.deployment_Params_Defaults.forwardSSLSession
+      // LAST_MILE_SECURITY = mwDefaults.deployment_Params_Defaults.lastMileSecurity
+      // PERSISTENT_OBJECT_STORE = mwDefaults.deployment_Params_Defaults.persistentObjectStore
+
+      // ANYPOINT_URL = mwDefauls.deployment_Params_Defaults.anypoint_url
+
+      ANYPOINT_URL = "https://anypoint.mulesoft.com"
+      MULE_VERSION =  "4.4.0"
+      RTF_PROVIDER = "MC"
+      SKIP_DEPLOY_VERIFY="false"
+
+      ENFORCE_REPLICAS_ACROSS_NODES = "true"
+      UPDATESTRATEGY = "rolling"
+      CLUSTERED = "false"
+      FORWARD_SSL_SESSION = "false"
+      LAST_MILE_SECURITY = "false"
+      PERSISTENT_OBJECT_STORE = "false"
 
       RUN_TESTS = pipelineParams.runTests
       IS_PRODUCTION = "false"
