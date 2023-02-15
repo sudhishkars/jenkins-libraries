@@ -25,7 +25,7 @@ def call(Map pipelineParams) {
       LAST_MILE_SECURITY = "${mwDefaults.deployment_Params_Defaults.lastMileSecurity}"
       PERSISTENT_OBJECT_STORE = "${mwDefaults.deployment_Params_Defaults.persistentObjectStore}"
 
-      ANYPOINT_URL = "${mwDefauls.deployment_Params_Defaults.anypoint_url}"
+      //ANYPOINT_URL = "${mwDefauls.deployment_Params_Defaults.anypoint_url}"
 
       // ANYPOINT_URL = "https://anypoint.mulesoft.com"
       // MULE_VERSION =  "4.4.0"
