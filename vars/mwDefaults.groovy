@@ -51,3 +51,5 @@ import groovy.transform.Field
     persistentObjectStore: "false",
     analytics_agent_header_injection_disabled: "false"
 ]
+
+@Field String mvnArgs = "-B -s $JENKINS_HOME/.m2/settings.xml"

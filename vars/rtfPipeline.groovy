@@ -50,9 +50,11 @@ def call(Map pipelineParams) {
       stage('Compile') {        
         steps {
           echo "Branch -- ${env.GIT_BRANCH}"
-          withCredentials([file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')]) {
-              sh "mvn -s ${MAVEN_SETTINGS_XML} -B -U clean compile"
-          }
+          // withCredentials([file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')]) {
+          //     print "SETTINGS FILE: " + $MAVEN_SETTINGS_XML 
+          //     sh 'mvn -s $MAVEN_SETTINGS_XML -B -U clean compile'
+          // }
+          sh "mvn ${mvnDefaults.maven_args} -U clean compile"
         }    
       }
 
@@ -61,18 +63,20 @@ def call(Map pipelineParams) {
           expression { "${RUN_TESTS}" == 'true' }
         }
         steps {
-          withCredentials([file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')]) {
-            sh "mvn -s ${MAVEN_SETTINGS_XML} -B -U test"
-          }
+          // withCredentials([file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')]) {
+          //   sh 'mvn -s $MAVEN_SETTINGS_XML -B -U test'
+          // }
+          sh "mvn ${mvnDefaults.maven_args} -U test"
         }
       }
 
       stage('Publish to Exchange') {
         steps {
           script {
-            withCredentials([file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')]) {
-              sh "mvn -s ${MAVEN_SETTINGS_XML} -B -U -PExchange deploy -DskipTests"
-            }
+            // withCredentials([file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')]) {
+            //   sh 'mvn -s $MAVEN_SETTINGS_XML -B -U -PExchange deploy -DskipTests'
+            // }
+            sh "mvn ${mvnDefaults.maven_args} -U -PExchange deploy -DskipTests"
           }
         }
       }
@@ -101,13 +105,14 @@ def call(Map pipelineParams) {
             def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_DEV}"
             print "App Name: " + appName
             print "RTF Cluster: " + ${RTF_CLUSTER_NAME}
-            withCredentials(
-              [file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')],
-              [usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", usernameVariable: 'AP_USER', passwordVariable: 'AP_PASS')],
-              [string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')]
-              ) {
-                sh "mvn -s ${MAVEN_SETTINGS_XML} -B -U mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=${ap_user} -Danypoint.env.clientSecret=${ap_pass} -Dsecret.key=${key}"
-            }                     
+            sh "mvn ${mvnDefaults.maven_args} mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=${ap_user} -Danypoint.env.clientSecret=${ap_pass} -Dsecret.key=${key}"
+            // withCredentials(
+            //   [file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')],
+            //   [usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", usernameVariable: 'AP_USER', passwordVariable: 'AP_PASS')],
+            //   [string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')]
+            //   ) {
+            //     sh 'mvn -s $MAVEN_SETTINGS_XML -B -U mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=${ap_user} -Danypoint.env.clientSecret=${ap_pass} -Dsecret.key=${key}'
+            // }                     
           }
         }
       }
