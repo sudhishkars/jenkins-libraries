@@ -54,7 +54,7 @@ def call(Map pipelineParams) {
           //     print "SETTINGS FILE: " + $MAVEN_SETTINGS_XML 
           //     sh 'mvn -s $MAVEN_SETTINGS_XML -B -U clean compile'
           // }
-          sh "mvn ${mwDefaults.maven_args} -U clean compile"
+          sh "mvn ${mwDefaults.mvnArgs} -U clean compile"
         }    
       }
 
@@ -66,7 +66,7 @@ def call(Map pipelineParams) {
           // withCredentials([file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')]) {
           //   sh 'mvn -s $MAVEN_SETTINGS_XML -B -U test'
           // }
-          sh "mvn ${mwDefaults.maven_args} -U test"
+          sh "mvn ${mwDefaults.mvnArgs} -U test"
         }
       }
 
@@ -76,7 +76,7 @@ def call(Map pipelineParams) {
             // withCredentials([file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')]) {
             //   sh 'mvn -s $MAVEN_SETTINGS_XML -B -U -PExchange deploy -DskipTests'
             // }
-            sh "mvn ${mwDefaults.maven_args} -U -PExchange deploy -DskipTests"
+            sh "mvn ${mwDefaults.mvnArgs} -U -PExchange deploy -DskipTests"
           }
         }
       }
@@ -108,12 +108,12 @@ def call(Map pipelineParams) {
             
             withCredentials(
              // [file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')],
-              [usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", usernameVariable: 'AP_USER', passwordVariable: 'AP_PASS')],
+              [usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", usernameVariable: 'ap_user', passwordVariable: 'ap_pass')],
               [string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')]
               ) {
                 //sh 'mvn -s $MAVEN_SETTINGS_XML -B -U mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=${ap_user} -Danypoint.env.clientSecret=${ap_pass} -Dsecret.key=${key}'
 
-                sh "mvn ${mwDefaults.maven_args} mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=${ap_user} -Danypoint.env.clientSecret=${ap_pass} -Dsecret.key=${key}"
+                sh "mvn ${mwDefaults.mvnArgs} mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key"
             }                     
           }
         }
