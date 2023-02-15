@@ -11,21 +11,21 @@ def call(Map pipelineParams) {
       //Maven settings XML
       // MAVEN_SETTINGS_XML=credentials('mvn-settings')
 
-      PORTFOLIO_NAME=${pipelineParams.portfolio}
+      PORTFOLIO_NAME="${pipelineParams.portfolio}"
       PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}"       
 
-      MULE_VERSION = mwDefaults.deployment_Params_Defaults.muleVersion
-      RTF_PROVIDER = mwDefaults.deployment_Params_Defaults.provider
-      SKIP_DEPLOY_VERIFY = mwDefaults.deployment_Params_Defaults.skipDeployVerification
+      MULE_VERSION = "${mwDefaults.deployment_Params_Defaults.muleVersion}"
+      RTF_PROVIDER = "${mwDefaults.deployment_Params_Defaults.provider}"
+      SKIP_DEPLOY_VERIFY = "${mwDefaults.deployment_Params_Defaults.skipDeployVerification}"
 
-      ENFORCE_REPLICAS_ACROSS_NODES = mwDefaults.deployment_Params_Defaults.enforceReplicasAcrossNodes
-      UPDATESTRATEGY = mwDefaults.deployment_Params_Defaults.updateStrategy
-      CLUSTERED = mwDefaults.deployment_Params_Defaults.clustered
-      FORWARD_SSL_SESSION = mwDefaults.deployment_Params_Defaults.forwardSSLSession
-      LAST_MILE_SECURITY = mwDefaults.deployment_Params_Defaults.lastMileSecurity
-      PERSISTENT_OBJECT_STORE = mwDefaults.deployment_Params_Defaults.persistentObjectStore
+      ENFORCE_REPLICAS_ACROSS_NODES = "${mwDefaults.deployment_Params_Defaults.enforceReplicasAcrossNodes}"
+      UPDATESTRATEGY = "${mwDefaults.deployment_Params_Defaults.updateStrategy}"
+      CLUSTERED = "${mwDefaults.deployment_Params_Defaults.clustered}"
+      FORWARD_SSL_SESSION = "${mwDefaults.deployment_Params_Defaults.forwardSSLSession}"
+      LAST_MILE_SECURITY = "${mwDefaults.deployment_Params_Defaults.lastMileSecurity}"
+      PERSISTENT_OBJECT_STORE = "${mwDefaults.deployment_Params_Defaults.persistentObjectStore}"
 
-      ANYPOINT_URL = mwDefauls.deployment_Params_Defaults.anypoint_url
+      ANYPOINT_URL = "${mwDefauls.deployment_Params_Defaults.anypoint_url}"
 
       // ANYPOINT_URL = "https://anypoint.mulesoft.com"
       // MULE_VERSION =  "4.4.0"
@@ -86,20 +86,21 @@ def call(Map pipelineParams) {
         }
         environment {
           MULE_ENV="dev1"
-          ANYPOINT_ENV=${MULE_ENV}
+          ANYPOINT_ENV="${MULE_ENV}"
 
-          RTF_CLUSTER_NAME = mwDefauls.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]["${MULE_ENV}"]
+          RTF_CLUSTER_NAME = "${mwDefauls.portFolio_Env_Mappings[${PORTFOLIO_NAME}][${MULE_ENV}]}"
 
-          CPU_RESERVED = mwDefaults.DEV1_Resource_Defaults.cpu_reserved
-          CPU_LIMIT = mwDefaults.DEV1_Resource_Defaults.cpu_limit
-          MEMORY_RESERVED = mwDefaults.DEV1_Resource_Defaults.memory_reserved
-          REPLICAS = mwDefaults.DEV1_Resource_Defaults.replicas                  
+          CPU_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.cpu_reserved}"
+          CPU_LIMIT = "${mwDefaults.DEV1_Resource_Defaults.cpu_limit}"
+          MEMORY_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.memory_reserved}"
+          REPLICAS = "${mwDefaults.DEV1_Resource_Defaults.replicas}"                 
         }
 
         steps {
           script {
             def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_DEV}"
             print "App Name: " + appName
+            print "RTF Cluster: " + ${RTF_CLUSTER_NAME}
             withCredentials(
               [file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')],
               [usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", usernameVariable: 'AP_USER', passwordVariable: 'AP_PASS')],
