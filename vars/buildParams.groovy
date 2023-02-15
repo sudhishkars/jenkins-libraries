@@ -10,8 +10,3 @@ import groovy.transform.Field
 
     acme1AnypointDevCredentialsId: "acme1-anypoint-dev"
 ]
-
-// project name
-// portfolio name
-// Visualizer layer
-// Visualizer Tags

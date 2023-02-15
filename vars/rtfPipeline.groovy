@@ -14,23 +14,14 @@ def call(Map pipelineParams) {
       MAVEN_SETTINGS_XML = credentials('mvn-settings')
 
       PORTFOLIO_NAME=${pipelineParams.portfolio}
-      PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}"
-
-      MULE_ENV="dev1"
-      ANYPOINT_ENV=${MULE_ENV}
-
-      PORTFOLIO_DEV_CREDENTIALS = credentials("${PORTFOLIO_NAME_LOWER}-anypoint-${MULE_ENV}")
-
-      SECRET_DEV_KEY=credentials("${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key")
-
-      RTF_CLUSTER_NAME = mwDefauls.portFolio_Env_Mappings[(PORTFOLIO_NAME)][(MULE_ENV)]
+      PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}"      
 
       MULE_VERSION = mwDefaults.deployment_Params_Defaults.muleVersion
       RTF_PROVIDER = mwDefaults.deployment_Params_Defaults.provider
-      RTF_SKIP_DEPLOY_VERIFY = mwDefaults.deployment_Params_Defaults.skipDeployVerification
+      SKIP_DEPLOY_VERIFY = mwDefaults.deployment_Params_Defaults.skipDeployVerification
 
       CONNECTED_APP_CLIENT_ID = ${ANYPOINT_CONNECTED_APP_CREDENTIALS.USER}
-      CONNECTED_APP_CLIENT_SECRET = ${ANYPOINT_CONNECTED_APP_CREDENTIALS.PSW}
+      CONNECTED_APP_CLIENT_SECRET = ${ANYPOINT_CONNECTED_APP_CREDENTIALS.PSW}  
 
       ENFORCE_REPLICAS_ACROSS_NODES = mwDefaults.deployment_Params_Defaults.enforceReplicasAcrossNodes
       UPDATESTRATEGY = mwDefaults.deployment_Params_Defaults.updateStrategy
@@ -39,17 +30,7 @@ def call(Map pipelineParams) {
       LAST_MILE_SECURITY = mwDefaults.deployment_Params_Defaults.lastMileSecurity
       PERSISTENT_OBJECT_STORE = mwDefaults.deployment_Params_Defaults.persistentObjectStore
 
-      CPU_RESERVED = mwDefaults.DEV1_Resource_Defaults.cpu_reserved
-      CPU_LIMIT = mwDefaults.DEV1_Resource_Defaults.cpu_limit
-      MEMORY_RESERVED = mwDefaults.DEV1_Resource_Defaults.memory_reserved
-      REPLICAS = mwDefaults.DEV1_Resource_Defaults.replicas
-
-      ANYPOINT_ENV_CLIENT_ID = ${PORTFOLIO_DEV_CREDENTIALS.USER}
-      ANYPOINT_ENV_CLIENT_SECRET = ${PORTFOLIO_DEV_CREDENTIALS.PSW}
-
       ANYPOINT_URL = mwDefauls.deployment_Params_Defaults.anypoint_url
-
-      SECRET_ENV_KEY = {SECRET_DEV_KEY}
 
       RUN_TESTS = pipelineParams.runTests
       IS_PRODUCTION = "false"
@@ -90,9 +71,29 @@ def call(Map pipelineParams) {
             expression { "${IS_PRODUCTION}" == 'false' }
           }
         }
+        environment {
+          MULE_ENV="dev1"
+          ANYPOINT_ENV=${MULE_ENV}
+
+          PORTFOLIO_CREDENTIALS = credentials("${PORTFOLIO_NAME_LOWER}-anypoint-${MULE_ENV}")
+
+          SECRET_KEY=credentials("${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key")          
+          ANYPOINT_ENV_CLIENT_ID = ${PORTFOLIO_CREDENTIALS.USER}
+          ANYPOINT_ENV_CLIENT_SECRET = ${PORTFOLIO_CREDENTIALS.PSW} 
+
+          RTF_CLUSTER_NAME = mwDefauls.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]["${MULE_ENV}"]
+
+          CPU_RESERVED = mwDefaults.DEV1_Resource_Defaults.cpu_reserved
+          CPU_LIMIT = mwDefaults.DEV1_Resource_Defaults.cpu_limit
+          MEMORY_RESERVED = mwDefaults.DEV1_Resource_Defaults.memory_reserved
+          REPLICAS = mwDefaults.DEV1_Resource_Defaults.replicas
+
+          SECRET_ENV_KEY = ${SECRET_KEY}                    
+        }
 
         steps {
-          script {            
+          script { 
+            print "App Name: " + appName         
             sh "mvn -s ${MAVEN_SETTINGS_XML} -B -U mule:deploy -Dmule.artifact=myArtifact.jar -Dmule.app.name=${appName}"
           }
         }
