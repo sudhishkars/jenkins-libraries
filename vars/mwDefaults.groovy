@@ -39,7 +39,7 @@ import groovy.transform.Field
 ]
 
 @Field Map deployment_Params_Defaults = [
-    anypoint_url: "https://anypoint.mulesoft.com"
+    anypoint_url: "https://anypoint.mulesoft.com",
     muleVersion: "4.4.0",
     provider: "MC",
     clustered: "false",
