@@ -44,7 +44,7 @@ import groovy.transform.Field
     provider: "MC",
     clustered: "false",
     lastMileSecurity: "false",
-    forwardSSLSession: "false"
+    forwardSSLSession: "false",
     enforceReplicasAcrossNodes: "true",
     skipDeployVerification: "true",
     updateStrategy: "rolling",
