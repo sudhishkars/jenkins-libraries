@@ -16,8 +16,8 @@ def call(Map pipelineParams) {
       // PORTFOLIO_NAME=${pipelineParams.portfolio}
       // PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}"   
 
-      CONNECTED_APP_CLIENT_ID = ${ANYPOINT_CONNECTED_APP_CREDENTIALS_USER}
-      CONNECTED_APP_CLIENT_SECRET = ${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}           
+      CONNECTED_APP_CLIENT_ID = "${ANYPOINT_CONNECTED_APP_CREDENTIALS_USER}"
+      CONNECTED_APP_CLIENT_SECRET = "${ANYPOINT_CONNECTED_APP_CREDENTIALS_PSW}"        
 
       // MULE_VERSION = mwDefaults.deployment_Params_Defaults.muleVersion
       // RTF_PROVIDER = mwDefaults.deployment_Params_Defaults.provider
@@ -91,9 +91,9 @@ def call(Map pipelineParams) {
 
       //     PORTFOLIO_CREDENTIALS = credentials("${PORTFOLIO_NAME_LOWER}-anypoint-${MULE_ENV}")
 
-      //     SECRET_KEY=credentials("${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key")          
-      //     ANYPOINT_ENV_CLIENT_ID = ${PORTFOLIO_CREDENTIALS_USER}
-      //     ANYPOINT_ENV_CLIENT_SECRET = ${PORTFOLIO_CREDENTIALS_PSW} 
+      //     SECRET_ENV_KEY=credentials("${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key")          
+      //     ANYPOINT_ENV_CLIENT_ID = "${PORTFOLIO_CREDENTIALS_USER}"
+      //     ANYPOINT_ENV_CLIENT_SECRET = "${PORTFOLIO_CREDENTIALS_PSW}"
 
       //     RTF_CLUSTER_NAME = mwDefauls.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]["${MULE_ENV}"]
 
@@ -101,8 +101,7 @@ def call(Map pipelineParams) {
       //     CPU_LIMIT = mwDefaults.DEV1_Resource_Defaults.cpu_limit
       //     MEMORY_RESERVED = mwDefaults.DEV1_Resource_Defaults.memory_reserved
       //     REPLICAS = mwDefaults.DEV1_Resource_Defaults.replicas
-
-      //     SECRET_ENV_KEY = ${SECRET_KEY}                    
+                  
       //   }
 
       //   steps {
