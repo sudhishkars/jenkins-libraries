@@ -3,7 +3,7 @@ def call(Map pipelineParams) {
     agent any
 
     tools {
-      maven "maven-385"
+      maven "mvn-385"
     }
 
     environment {
