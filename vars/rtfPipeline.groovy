@@ -76,7 +76,7 @@ def call(Map pipelineParams) {
             // withCredentials([file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')]) {
             //   sh 'mvn -s $MAVEN_SETTINGS_XML -B -U -PExchange deploy -DskipTests'
             // }
-            sh "mvn ${mwDefaults.mvnArgs} -U -PExchange deploy -DskipTests"
+            sh "mvn ${mwDefaults.mvnArgs} -U -Pexchange deploy -DskipTests"
           }
         }
       }
