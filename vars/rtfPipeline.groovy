@@ -39,7 +39,7 @@ def call(Map pipelineParams) {
       // LAST_MILE_SECURITY = "false"
       // PERSISTENT_OBJECT_STORE = "false"
 
-      RUN_TESTS = pipelineParams.runTests
+      RUN_TESTS = "${pipelineParams.runTests}"
       IS_PRODUCTION = "false"
     }
 
