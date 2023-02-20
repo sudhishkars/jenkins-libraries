@@ -94,7 +94,7 @@ def call(Map pipelineParams) {
 
           PORTFOLIO_ENV = "${mwDefauls.portFolio_Env_Mappings[${PORTFOLIO_NAME}]"
  
-          RTF_CLUSTER_NAME = "${PORTFOLIO_ENV[${MULE_ENV}][0]}"
+          RTF_CLUSTER_NAME = "${$PORTFOLIO_ENV[${MULE_ENV}][0]}"
 
           CPU_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.cpu_reserved}"
           CPU_LIMIT = "${mwDefaults.DEV1_Resource_Defaults.cpu_limit}"
