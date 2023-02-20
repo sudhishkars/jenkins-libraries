@@ -39,8 +39,8 @@ def call(Map pipelineParams) {
       // LAST_MILE_SECURITY = "false"
       // PERSISTENT_OBJECT_STORE = "false"
 
-      // RUN_TESTS = pipelineParams.runTests
-      // IS_PRODUCTION = "false"
+      RUN_TESTS = pipelineParams.runTests
+      IS_PRODUCTION = "false"
     }
 
     
@@ -99,7 +99,6 @@ def call(Map pipelineParams) {
           MEMORY_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.memory_reserved}"
           REPLICAS = "${mwDefaults.DEV1_Resource_Defaults.replicas}"                 
         }
-
         steps {
           script {
             def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_DEV}"
@@ -108,12 +107,12 @@ def call(Map pipelineParams) {
             
             withCredentials(
              // [file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')],
-              [usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", usernameVariable: 'ap_user', passwordVariable: 'ap_pass')],
+              [usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass')],
               [string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')]
               ) {
                 //sh 'mvn -s $MAVEN_SETTINGS_XML -B -U mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=${ap_user} -Danypoint.env.clientSecret=${ap_pass} -Dsecret.key=${key}'
 
-                sh "mvn ${mwDefaults.mvnArgs} mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key"
+                sh "mvn ${mwDefaults.mvnArgs} -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key"
             }                     
           }
         }
