@@ -31,25 +31,34 @@ import groovy.transform.Field
 //     DEV1: "23b1b0a9-8dd0-426d-b3e5-308f7c867b1e"
 // ]
 
-@Field Map DEV1_Resource_Defaults = [
-    cpu_reserved: "20m",
-    cpu_limit: "200m",
-    memory_reserved: "1000Mi",
-    replicas: 1
+// @Field Map DEV1_Resource_Defaults = [
+//     cpu_reserved: "20m",
+//     cpu_limit: "200m",
+//     memory_reserved: "1000Mi",
+//     replicas: 1
+// ]
+
+
+@Field Map deployment_Params_Constants = [
+    provider: "MC",
+    last_mile_security: "false",
+    forward_SSL_session: "false",
+    update_strategy: "rolling",
+    persistent_object_store: "false",
+    analytics_agent_header_injection_disabled: "false"    
 ]
+
 
 @Field Map deployment_Params_Defaults = [
     //anypoint_url: "https://anypoint.mulesoft.com",
-    muleVersion: "4.4.0",
-    provider: "MC",
+    mule_version: "4.4.0",
     clustered: "false",
-    lastMileSecurity: "false",
-    forwardSSLSession: "false",
-    enforceReplicasAcrossNodes: "false",
-    skipDeployVerification: "true",
-    updateStrategy: "rolling",
-    persistentObjectStore: "false",
-    analytics_agent_header_injection_disabled: "false"
+    enforce_replicas_across_nodes: "false",
+    skip_deploy_verify: "true",
+    cpu_reserved: "20m",
+    cpu_limit: "200m",
+    memory_reserved: "700Mi",
+    replicas: 1    
 ]
 
 @Field String mvnArgs = "-B -s $JENKINS_HOME/.m2/settings.xml"

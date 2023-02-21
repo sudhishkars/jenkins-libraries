@@ -12,32 +12,8 @@ def call(Map pipelineParams) {
       // MAVEN_SETTINGS_XML=credentials('mvn-settings')
 
       PORTFOLIO_NAME="${pipelineParams.portfolio}"
-      PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}"       
-
-      MULE_VERSION = "${mwDefaults.deployment_Params_Defaults.muleVersion}"
-      RTF_PROVIDER = "${mwDefaults.deployment_Params_Defaults.provider}"
-      SKIP_DEPLOY_VERIFY = "${mwDefaults.deployment_Params_Defaults.skipDeployVerification}"
-
-      ENFORCE_REPLICAS_ACROSS_NODES = "${mwDefaults.deployment_Params_Defaults.enforceReplicasAcrossNodes}"
-      UPDATESTRATEGY = "${mwDefaults.deployment_Params_Defaults.updateStrategy}"
-      CLUSTERED = "${mwDefaults.deployment_Params_Defaults.clustered}"
-      FORWARD_SSL_SESSION = "${mwDefaults.deployment_Params_Defaults.forwardSSLSession}"
-      LAST_MILE_SECURITY = "${mwDefaults.deployment_Params_Defaults.lastMileSecurity}"
-      PERSISTENT_OBJECT_STORE = "${mwDefaults.deployment_Params_Defaults.persistentObjectStore}"
-
-      //ANYPOINT_URL = "${mwDefauls.deployment_Params_Defaults.anypoint_url}"
-
-      // ANYPOINT_URL = "https://anypoint.mulesoft.com"
-      // MULE_VERSION =  "4.4.0"
-      // RTF_PROVIDER = "MC"
-      // SKIP_DEPLOY_VERIFY="false"
-
-      // ENFORCE_REPLICAS_ACROSS_NODES = "true"
-      // UPDATESTRATEGY = "rolling"
-      // CLUSTERED = "false"
-      // FORWARD_SSL_SESSION = "false"
-      // LAST_MILE_SECURITY = "false"
-      // PERSISTENT_OBJECT_STORE = "false"
+      PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}" 
+      PROJECT="${pipelineParams.projectName}"    
 
       RUN_TESTS = "${pipelineParams.runTests}"
       IS_PRODUCTION = "false"
@@ -89,32 +65,57 @@ def call(Map pipelineParams) {
           ANYPOINT_ENV="${MULE_ENV}"
 
           //PORTFOLIO_ENV = "${mwDefaults.portFolio_Env_Mappings[PORTFOLIO_NAME]}"
+
+          // DEPLOY_PARAMS="${deployUtils.getDeploymentConfigs(mwDefaults.deployment_Params_Defaults, 
+          //           mwDefaults.deployment_Params_Constants,PORTFOLIO_NAME_LOWER,ANYPOINT_DEV,PROJECT)}"
+          
  
-          RTF_CLUSTER_NAME = "${mwDefaults.portFolio_Env_Mappings[PORTFOLIO_NAME][MULE_ENV][0]}"
+          // RTF_CLUSTER_NAME = "${mwDefaults.portFolio_Env_Mappings[PORTFOLIO_NAME][MULE_ENV][0]}"
 
-          CPU_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.cpu_reserved}"
-          CPU_LIMIT = "${mwDefaults.DEV1_Resource_Defaults.cpu_limit}"
-          MEMORY_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.memory_reserved}"
-          REPLICAS = "${mwDefaults.DEV1_Resource_Defaults.replicas}"  
+          // CPU_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.cpu_reserved}"
+          // CPU_LIMIT = "${mwDefaults.DEV1_Resource_Defaults.cpu_limit}"
+          // MEMORY_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.memory_reserved}"
+          // REPLICAS = "${mwDefaults.DEV1_Resource_Defaults.replicas}"  
 
-          APP_NAME = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"           
+          // MULE_VERSION = "${mwDefaults.deployment_Params_Defaults.muleVersion}"
+          // RTF_PROVIDER = "${mwDefaults.deployment_Params_Defaults.provider}"
+          // SKIP_DEPLOY_VERIFY = "${mwDefaults.deployment_Params_Defaults.skipDeployVerification}"
+
+          // ENFORCE_REPLICAS_ACROSS_NODES = "${mwDefaults.deployment_Params_Defaults.enforceReplicasAcrossNodes}"
+          // UPDATE_STRATEGY = "${mwDefaults.deployment_Params_Defaults.updateStrategy}"
+          // CLUSTERED = "${mwDefaults.deployment_Params_Defaults.clustered}"
+          // FORWARD_SSL_SESSION = "${mwDefaults.deployment_Params_Defaults.forwardSSLSession}"
+          // LAST_MILE_SECURITY = "${mwDefaults.deployment_Params_Defaults.lastMileSecurity}"
+          // PERSISTENT_OBJECT_STORE = "${mwDefaults.deployment_Params_Defaults.persistentObjectStore}"          
+
+          APP_NAME = "${PORTFOLIO_NAME_LOWER}-${PROJECT}-${ANYPOINT_ENV}"           
         }
         steps {
           script {
             //def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
             println "App Name: ${APP_NAME}"
 
+            def deployParams = mwDefaults.deployment_Params_Defaults
+
+            deployUtils.getDeploymentConfigs(deployParams,${PORTFOLIO_NAME_LOWER},${ANYPOINT_DEV},${PROJECT})
+
+            def clusters = deployParams['CLUSTERS']
             //def mvnArgs = "${mwDefaults.mvnArgs}"
             //def pEnv = mwDefaults.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]
             //println "Cluster: " + pEnv["${MULE_ENV}"][0]
             
-            println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
+            //println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
+
+            //println "Cluster: " + cluster
             
             withCredentials([
               usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass'),
               string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')
-              ]) {              
-                sh 'mvn $MVN_ARGS -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=$APP_NAME -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key'
+              ]) {     
+                for (cluster in clusters)   { 
+                  println "Deploying to Cluster: " + cluster
+                  //sh 'mvn $MVN_ARGS -Prtf mule:deploy -Dmule.artifact=dummy.jar -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key -Drtf.cluster=$cluster'
+                }
             }                     
           }
         }
