@@ -109,7 +109,7 @@ def call(Map pipelineParams) {
               usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass'),
               string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')
               ]) {              
-                sh "mvn ${mwDefaults.mvnArgs} -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key"
+                sh 'mvn ${mwDefaults.mvnArgs} -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=$appName -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key'
             }                     
           }
         }
