@@ -60,6 +60,15 @@ def call(Map pipelineParams) {
             expression { "${IS_PRODUCTION}" == 'false' }
           }
         }
+
+        def deployParams = mwDefaults.deployment_Params_Defaults
+
+        println "deployParams1: ${deployParams}"
+
+        deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}","${ANYPOINT_ENV}","${PROJECT}")
+
+        println "deployParams2: ${deployParams}"
+
         environment {
           MULE_ENV="dev1"
           ANYPOINT_ENV="${MULE_ENV}"
@@ -86,7 +95,23 @@ def call(Map pipelineParams) {
           // CLUSTERED = "${mwDefaults.deployment_Params_Defaults.clustered}"
           // FORWARD_SSL_SESSION = "${mwDefaults.deployment_Params_Defaults.forwardSSLSession}"
           // LAST_MILE_SECURITY = "${mwDefaults.deployment_Params_Defaults.lastMileSecurity}"
-          // PERSISTENT_OBJECT_STORE = "${mwDefaults.deployment_Params_Defaults.persistentObjectStore}"          
+          // PERSISTENT_OBJECT_STORE = "${mwDefaults.deployment_Params_Defaults.persistentObjectStore}"     
+
+          CPU_RESERVED = "${deployParams.cpu_reserved}"
+          CPU_LIMIT = "${deployParams.cpu_limit}"
+          MEMORY_RESERVED = "${deployParams.memory_reserved}"
+          REPLICAS = "${deployParams.replicas}"  
+
+          MULE_VERSION = "${deployParams.mule_version}"
+          RTF_PROVIDER = "${deployParams.provider}"
+          SKIP_DEPLOY_VERIFY = "${deployParams.skip_deploy_verify}"
+
+          ENFORCE_REPLICAS_ACROSS_NODES = "${deployParams.enforce_replicas_across_nodes}"
+          UPDATE_STRATEGY = "${deployParams.update_strategy}"
+          CLUSTERED = "${deployParams.clustered}"
+          FORWARD_SSL_SESSION = "${deployParams.forward_ssl_session}"
+          LAST_MILE_SECURITY = "${deployParams.last_mile_security}"
+          PERSISTENT_OBJECT_STORE = "${deployParams.persistent_object_store}"                  
 
           APP_NAME = "${PORTFOLIO_NAME_LOWER}-${PROJECT}-${ANYPOINT_ENV}"           
         }
@@ -95,13 +120,13 @@ def call(Map pipelineParams) {
             //def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
             println "App Name: ${APP_NAME}"
 
-            def deployParams = mwDefaults.deployment_Params_Defaults
+            // def deployParams = mwDefaults.deployment_Params_Defaults
 
-            println "deployParams1: ${deployParams}"
+            // println "deployParams1: ${deployParams}"
 
-            deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}","${ANYPOINT_ENV}","${PROJECT}")
+            // deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}","${ANYPOINT_ENV}","${PROJECT}")
 
-            println "deployParams2: ${deployParams}"
+            // println "deployParams2: ${deployParams}"
 
             def clusters = deployParams['CLUSTERS']
             //def mvnArgs = "${mwDefaults.mvnArgs}"
