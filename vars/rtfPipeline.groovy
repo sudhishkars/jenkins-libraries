@@ -86,10 +86,10 @@ def call(Map pipelineParams) {
           MULE_ENV="dev1"
           ANYPOINT_ENV="${MULE_ENV}"
 
-          //PORTFOLIO_ENV = "${mwDefauls.portFolio_Env_Mappings[${PORTFOLIO_NAME}]}"
+          PORTFOLIO_ENV = "${mwDefauls.portFolio_Env_Mappings[${PORTFOLIO_NAME}]}"
  
-          //RTF_CLUSTER_NAME = "${${PORTFOLIO_ENV}[${MULE_ENV}][0]}"
-          RTF_CLUSTER_NAME = "os-rtf-1"
+          RTF_CLUSTER_NAME = "${${PORTFOLIO_ENV}[${MULE_ENV}][0]}"
+          //RTF_CLUSTER_NAME = "os-rtf-1"
 
           CPU_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.cpu_reserved}"
           CPU_LIMIT = "${mwDefaults.DEV1_Resource_Defaults.cpu_limit}"
@@ -100,6 +100,8 @@ def call(Map pipelineParams) {
           script {
             def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
             println "App Name: " + appName
+
+            println "P Env: ${PORTFOLIO_ENV}"
             
             println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
 
