@@ -100,6 +100,7 @@ def call(Map pipelineParams) {
             def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
             println "App Name: " + appName
 
+            def mvnArgs = "${$mwDefaults.mvnArgs}"
             //def pEnv = mwDefaults.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]
             //println "Cluster: " + pEnv["${MULE_ENV}"][0]
             
@@ -109,7 +110,7 @@ def call(Map pipelineParams) {
               usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass'),
               string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')
               ]) {              
-                sh 'mvn $mwDefaults.mvnArgs -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=$appName -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key'
+                sh 'mvn $mvnArgs -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=$appName -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key'
             }                     
           }
         }
