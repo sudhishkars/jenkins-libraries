@@ -86,9 +86,9 @@ def call(Map pipelineParams) {
           MULE_ENV="dev1"
           ANYPOINT_ENV="${MULE_ENV}"
 
-          //PORTFOLIO_ENV = "${mwDefaults.portFolio_Env_Mappings[$PORTFOLIO_NAME]}"
+          //PORTFOLIO_ENV = "${mwDefaults.portFolio_Env_Mappings[PORTFOLIO_NAME]}"
  
-          RTF_CLUSTER_NAME = "${mwDefaults.portFolio_Env_Mappings[$PORTFOLIO_NAME][$MULE_ENV][0]}"
+          RTF_CLUSTER_NAME = "${mwDefaults.portFolio_Env_Mappings[PORTFOLIO_NAME][MULE_ENV][0]}"
           //RTF_CLUSTER_NAME = "os-rtf-1"
 
           CPU_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.cpu_reserved}"
@@ -110,10 +110,6 @@ def call(Map pipelineParams) {
             println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
 
             //println "Cluster: " + pEnv["${MULE_ENV}"][0]
-
-            println "CPU_RESERVED:  ${CPU_RESERVED}, CPU_LIMIT: ${CPU_LIMIT}, ENFORCE_REPLICAS_ACROSS_NODES: ${ENFORCE_REPLICAS_ACROSS_NODES}"
-
-            println "SKIP_DEPLOY_VERIFY: ${SKIP_DEPLOY_VERIFY}"
             
             // withCredentials(
             //  // [file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')],
