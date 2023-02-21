@@ -42,7 +42,7 @@ import groovy.transform.Field
 @Field Map deployment_Params_Constants = [
     provider: "MC",
     last_mile_security: "false",
-    forward_SSL_session: "false",
+    forward_ssl_session: "false",
     update_strategy: "rolling",
     persistent_object_store: "false",
     analytics_agent_header_injection_disabled: "false"    
@@ -51,7 +51,7 @@ import groovy.transform.Field
 
 @Field Map deployment_Params_Defaults = [
     //anypoint_url: "https://anypoint.mulesoft.com",
-    clusters: "",
+    clusters: null,
     mule_version: "4.4.0",
     clustered: "false",
     enforce_replicas_across_nodes: "false",
