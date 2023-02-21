@@ -111,14 +111,14 @@ def call(Map pipelineParams) {
             //def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
             //println "App Name: ${APP_NAME}"
 
-            def mule_env = "dev1"
-            def anypoint_env = mule_env
+            def muleEnv = "dev1"
+            def anypointEnv = muleEnv
 
             def deployParams = mwDefaults.deployment_Params_Defaults
 
             println "deployParams1: ${deployParams}"
 
-            deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}",anypoint_env,"${PROJECT}")
+            deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}",anypointEnv,"${PROJECT}")
 
             println "deployParams2: ${deployParams}"
 
@@ -131,19 +131,13 @@ def call(Map pipelineParams) {
 
             //println "Cluster: " + cluster
             withEnv ([
-                "MULE_ENV = ${mule_env}",
-                "ANYPOINT_ENV = ${anypoint_env}",
-                "APP_NAME = ${PORTFOLIO_NAME_LOWER}-${PROJECT}-${anypoint_env}",
-
-                "CPU_RESERVED = ${deployParams.cpu_reserved}",
+                "MULE_ENV=${muleEnv}","ANYPOINT_ENV=${anypointEnv}","APP_NAME = ${PORTFOLIO_NAME_LOWER}-${PROJECT}-${anypoint_env}","CPU_RESERVED = ${deployParams.cpu_reserved}",
                 "CPU_LIMIT = ${deployParams.cpu_limit}",
                 "MEMORY_RESERVED = ${deployParams.memory_reserved}",
                 "REPLICAS = ${deployParams.replicas}",
-
                 "MULE_VERSION = ${deployParams.mule_version}",
                 "RTF_PROVIDER = ${deployParams.provider}",
                 "SKIP_DEPLOY_VERIFY = ${deployParams.skip_deploy_verify}",
-
                 "ENFORCE_REPLICAS_ACROSS_NODES = ${deployParams.enforce_replicas_across_nodes}",
                 "UPDATE_STRATEGY = ${deployParams.update_strategy}",
                 "CLUSTERED = ${deployParams.clustered}",
