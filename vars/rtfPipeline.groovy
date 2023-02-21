@@ -97,7 +97,11 @@ def call(Map pipelineParams) {
 
             def deployParams = mwDefaults.deployment_Params_Defaults
 
+            println "deployParams1: ${deployParams}"
+
             deployUtils.getDeploymentConfigs(deployParams,${PORTFOLIO_NAME_LOWER},${ANYPOINT_DEV},${PROJECT})
+
+            println "deployParams2: ${deployParams}"
 
             def clusters = deployParams['CLUSTERS']
             //def mvnArgs = "${mwDefaults.mvnArgs}"
