@@ -101,7 +101,7 @@ def call(Map pipelineParams) {
             def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
             println "App Name: " + appName
 
-            def pEnv = mwDefauls.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]
+            def pEnv = mwDefaults.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]
 
             //println "P Env: ${PORTFOLIO_ENV}"
 
