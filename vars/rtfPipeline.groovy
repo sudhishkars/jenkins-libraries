@@ -86,9 +86,9 @@ def call(Map pipelineParams) {
           MULE_ENV="dev1"
           ANYPOINT_ENV="${MULE_ENV}"
 
-          PORTFOLIO_ENV = "${mwDefauls.portFolio_Env_Mappings.'${PORTFOLIO_NAME}'}"
+          //PORTFOLIO_ENV = "${mwDefauls.portFolio_Env_Mappings[$PORTFOLIO_NAME]}"
  
-          RTF_CLUSTER_NAME = "${${PORTFOLIO_ENV}[${MULE_ENV}][0]}"
+          //RTF_CLUSTER_NAME = "${${PORTFOLIO_ENV}[${MULE_ENV}][0]}"
           //RTF_CLUSTER_NAME = "os-rtf-1"
 
           CPU_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.cpu_reserved}"
@@ -101,9 +101,15 @@ def call(Map pipelineParams) {
             def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
             println "App Name: " + appName
 
-            println "P Env: ${PORTFOLIO_ENV}"
+            def pEnv = mwDefauls.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]
+
+            //println "P Env: ${PORTFOLIO_ENV}"
+
+            println "P Env: " + pEnv
             
-            println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
+            //println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
+
+            println "Cluster: " + pEnv["${MULE_ENV}"][0]
 
             println "CPU_RESERVED:  ${CPU_RESERVED}, CPU_LIMIT: ${CPU_LIMIT}, ENFORCE_REPLICAS_ACROSS_NODES: ${ENFORCE_REPLICAS_ACROSS_NODES}"
 
