@@ -60,15 +60,6 @@ def call(Map pipelineParams) {
             expression { "${IS_PRODUCTION}" == 'false' }
           }
         }
-        // script {
-        //   def deployParams = mwDefaults.deployment_Params_Defaults
-
-        //   println "deployParams1: ${deployParams}"
-
-        //   deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}","${ANYPOINT_ENV}","${PROJECT}")
-
-        //   println "deployParams2: ${deployParams}"
-        // }
         // environment {
         //   MULE_ENV="dev1"
         //   ANYPOINT_ENV="${MULE_ENV}"
@@ -174,4 +165,5 @@ def call(Map pipelineParams) {
 
     }
   }
+}
 }
