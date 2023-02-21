@@ -99,7 +99,7 @@ def call(Map pipelineParams) {
 
             println "deployParams1: ${deployParams}"
 
-            deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}","${ANYPOINT_DEV}","${PROJECT}")
+            deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}","${ANYPOINT_ENV}","${PROJECT}")
 
             println "deployParams2: ${deployParams}"
 
