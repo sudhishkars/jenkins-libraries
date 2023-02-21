@@ -131,19 +131,22 @@ def call(Map pipelineParams) {
 
             //println "Cluster: " + cluster
             withEnv ([
-                "MULE_ENV=${muleEnv}","ANYPOINT_ENV=${anypointEnv}","APP_NAME = ${PORTFOLIO_NAME_LOWER}-${PROJECT}-${anypointEnv}","CPU_RESERVED = ${deployParams.cpu_reserved}",
-                "CPU_LIMIT = ${deployParams.cpu_limit}",
-                "MEMORY_RESERVED = ${deployParams.memory_reserved}",
-                "REPLICAS = ${deployParams.replicas}",
-                "MULE_VERSION = ${deployParams.mule_version}",
-                "RTF_PROVIDER = ${deployParams.provider}",
-                "SKIP_DEPLOY_VERIFY = ${deployParams.skip_deploy_verify}",
-                "ENFORCE_REPLICAS_ACROSS_NODES = ${deployParams.enforce_replicas_across_nodes}",
-                "UPDATE_STRATEGY = ${deployParams.update_strategy}",
-                "CLUSTERED = ${deployParams.clustered}",
-                "FORWARD_SSL_SESSION = ${deployParams.forward_ssl_session}",
-                "LAST_MILE_SECURITY = ${deployParams.last_mile_security}",
-                "PERSISTENT_OBJECT_STORE = ${deployParams.persistent_object_store}"
+                "MULE_ENV=${muleEnv}",
+                "ANYPOINT_ENV=${anypointEnv}",
+                "APP_NAME= ${PORTFOLIO_NAME_LOWER}-${PROJECT}-${anypointEnv}",
+                "CPU_RESERVED=${deployParams.cpu_reserved}",
+                "CPU_LIMIT=${deployParams.cpu_limit}",
+                "MEMORY_RESERVED=${deployParams.memory_reserved}",
+                "REPLICAS=${deployParams.replicas}",
+                "MULE_VERSION=${deployParams.mule_version}",
+                "RTF_PROVIDER=${deployParams.provider}",
+                "SKIP_DEPLOY_VERIFY=${deployParams.skip_deploy_verify}",
+                "ENFORCE_REPLICAS_ACROSS_NODES=${deployParams.enforce_replicas_across_nodes}",
+                "UPDATE_STRATEGY=${deployParams.update_strategy}",
+                "CLUSTERED=${deployParams.clustered}",
+                "FORWARD_SSL_SESSION=${deployParams.forward_ssl_session}",
+                "LAST_MILE_SECURITY=${deployParams.last_mile_security}",
+                "PERSISTENT_OBJECT_STORE=${deployParams.persistent_object_store}"
             ]) {
                   withCredentials([
                     usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass'),
