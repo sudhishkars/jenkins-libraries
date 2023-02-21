@@ -41,6 +41,8 @@ def call(Map pipelineParams) {
 
       RUN_TESTS = "${pipelineParams.runTests}"
       IS_PRODUCTION = "false"
+
+      MVN_ARGS = "${mwDefaults.mvnArgs}"
     }
 
     
@@ -93,14 +95,16 @@ def call(Map pipelineParams) {
           CPU_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.cpu_reserved}"
           CPU_LIMIT = "${mwDefaults.DEV1_Resource_Defaults.cpu_limit}"
           MEMORY_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.memory_reserved}"
-          REPLICAS = "${mwDefaults.DEV1_Resource_Defaults.replicas}"                 
+          REPLICAS = "${mwDefaults.DEV1_Resource_Defaults.replicas}"  
+
+          APP_NAME = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"           
         }
         steps {
           script {
-            def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
-            println "App Name: " + appName
+            //def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
+            println "App Name: " + $APP_NAME
 
-            def mvnArgs = "${mwDefaults.mvnArgs}"
+            //def mvnArgs = "${mwDefaults.mvnArgs}"
             //def pEnv = mwDefaults.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]
             //println "Cluster: " + pEnv["${MULE_ENV}"][0]
             
@@ -110,7 +114,7 @@ def call(Map pipelineParams) {
               usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass'),
               string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')
               ]) {              
-                sh "mvn ${mvnArgs} -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key"
+                sh 'mvn $MVN_ARGS -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=$APP_NAME -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key'
             }                     
           }
         }
