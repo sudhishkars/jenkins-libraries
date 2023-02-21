@@ -102,7 +102,7 @@ def call(Map pipelineParams) {
         steps {
           script {
             //def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
-            println "App Name: " + $APP_NAME
+            println "App Name: ${APP_NAME}"
 
             //def mvnArgs = "${mwDefaults.mvnArgs}"
             //def pEnv = mwDefaults.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]
