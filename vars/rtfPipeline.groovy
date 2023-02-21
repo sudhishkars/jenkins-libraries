@@ -154,7 +154,8 @@ def call(Map pipelineParams) {
                     usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass'),
                     string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')
                     ]) { 
-                      println "Env: " + env
+                      println "Mule App: ${APP_NAME}, MULE Env: ${MULE_ENV}, UPDATE_STRATEGY: ${UPDATE_STRATEGY}"
+                      println "REPLICAS: ${REPLICAS}, CPU_RESERVED Env: ${CPU_RESERVED}, CPU_LIMIT: ${CPU_LIMIT}"
                       for (cluster in clusters)   { 
                         println "Deploying to Cluster: " + cluster
                         //sh 'mvn $MVN_ARGS -Prtf mule:deploy -Dmule.artifact=dummy.jar -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key -Drtf.cluster=$cluster'
