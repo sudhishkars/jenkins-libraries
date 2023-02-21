@@ -120,14 +120,14 @@ def call(Map pipelineParams) {
             //def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
             //println "App Name: ${APP_NAME}"
 
-            def mule-env = "dev1"
-            def anypoint-env = mule-env
+            def mule_env = "dev1"
+            def anypoint_env = mule_env
 
             def deployParams = mwDefaults.deployment_Params_Defaults
 
             println "deployParams1: ${deployParams}"
 
-            deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}",anypoint-env,"${PROJECT}")
+            deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}",anypoint_env,"${PROJECT}")
 
             println "deployParams2: ${deployParams}"
 
@@ -140,9 +140,9 @@ def call(Map pipelineParams) {
 
             //println "Cluster: " + cluster
             withEnv ([
-                MULE_ENV = "${mule-env}",
-                ANYPOINT_ENV = "${anypoint-env}",
-                APP_NAME = "${PORTFOLIO_NAME_LOWER}-${anypoint-env}-${PROJECT}"
+                MULE_ENV = "${mule_env}",
+                ANYPOINT_ENV = "${anypoint_env}",
+                APP_NAME = "${PORTFOLIO_NAME_LOWER}-${anypoint_env}-${PROJECT}"
                 CPU_RESERVED = "${deployParams.cpu_reserved}",
                 CPU_LIMIT = "${deployParams.cpu_limit}",
                 MEMORY_RESERVED = "${deployParams.memory_reserved}",
