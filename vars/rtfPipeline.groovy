@@ -133,7 +133,7 @@ def call(Map pipelineParams) {
             withEnv ([
                 MULE_ENV = "${mule_env}",
                 ANYPOINT_ENV = "${anypoint_env}",
-                APP_NAME = "${PORTFOLIO_NAME_LOWER}-${anypoint_env}-${PROJECT}"
+                APP_NAME = "${PORTFOLIO_NAME_LOWER}-${PROJECT}-${anypoint_env}",
                 CPU_RESERVED = "${deployParams.cpu_reserved}",
                 CPU_LIMIT = "${deployParams.cpu_limit}",
                 MEMORY_RESERVED = "${deployParams.memory_reserved}",
