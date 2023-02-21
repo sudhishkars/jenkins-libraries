@@ -89,7 +89,6 @@ def call(Map pipelineParams) {
           //PORTFOLIO_ENV = "${mwDefaults.portFolio_Env_Mappings[PORTFOLIO_NAME]}"
  
           RTF_CLUSTER_NAME = "${mwDefaults.portFolio_Env_Mappings[PORTFOLIO_NAME][MULE_ENV][0]}"
-          //RTF_CLUSTER_NAME = "os-rtf-1"
 
           CPU_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.cpu_reserved}"
           CPU_LIMIT = "${mwDefaults.DEV1_Resource_Defaults.cpu_limit}"
@@ -106,11 +105,10 @@ def call(Map pipelineParams) {
             
             println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
             
-            withCredentials(
-             // [file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')],
-              [usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass')],
-              [string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')]
-              ) {              
+            withCredentials([
+              usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass'),
+              string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')
+              ]) {              
                 sh "mvn ${mwDefaults.mvnArgs} -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key"
             }                     
           }
