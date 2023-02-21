@@ -102,24 +102,17 @@ def call(Map pipelineParams) {
             println "App Name: " + appName
 
             //def pEnv = mwDefaults.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]
-
-            //println "P Env: ${PORTFOLIO_ENV}"
-
-            //println "P Env: " + pEnv
-            
-            println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
-
             //println "Cluster: " + pEnv["${MULE_ENV}"][0]
             
-            // withCredentials(
-            //  // [file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')],
-            //   [usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass')],
-            //   [string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')]
-            //   ) {
-            //     //sh 'mvn -s $MAVEN_SETTINGS_XML -B -U mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=${ap_user} -Danypoint.env.clientSecret=${ap_pass} -Dsecret.key=${key}'
-
-            //     sh "mvn ${mwDefaults.mvnArgs} -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key"
-            // }                     
+            println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
+            
+            withCredentials(
+             // [file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')],
+              [usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass')],
+              [string(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-key", variable: 'key')]
+              ) {              
+                sh "mvn ${mwDefaults.mvnArgs} -Prtf mule:deploy -Dmule.artifact=dummy.jar -Dmule.app.name=${appName} -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key"
+            }                     
           }
         }
       }
