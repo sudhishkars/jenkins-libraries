@@ -98,7 +98,7 @@ def call(Map pipelineParams) {
         }
         steps {
           script {
-            def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_DEV}"
+            def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
             println "App Name: " + appName
             
             println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
