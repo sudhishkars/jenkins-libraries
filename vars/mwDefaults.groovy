@@ -35,7 +35,7 @@ import groovy.transform.Field
     cpu_reserved: "20m",
     cpu_limit: "200m",
     memory_reserved: "1000Mi",
-    replicas: 2
+    replicas: 1
 ]
 
 @Field Map deployment_Params_Defaults = [
@@ -45,7 +45,7 @@ import groovy.transform.Field
     clustered: "false",
     lastMileSecurity: "false",
     forwardSSLSession: "false",
-    enforceReplicasAcrossNodes: "true",
+    enforceReplicasAcrossNodes: "false",
     skipDeployVerification: "true",
     updateStrategy: "rolling",
     persistentObjectStore: "false",
