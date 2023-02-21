@@ -148,7 +148,7 @@ def call(Map pipelineParams) {
                 CLUSTERED = "${deployParams.clustered}",
                 FORWARD_SSL_SESSION = "${deployParams.forward_ssl_session}",
                 LAST_MILE_SECURITY = "${deployParams.last_mile_security}",
-                PERSISTENT_OBJECT_STORE = "${deployParams.persistent_object_store}",
+                PERSISTENT_OBJECT_STORE = "${deployParams.persistent_object_store}"
             ]) {
                   withCredentials([
                     usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass'),
