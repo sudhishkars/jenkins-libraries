@@ -86,7 +86,7 @@ def call(Map pipelineParams) {
           MULE_ENV="dev1"
           ANYPOINT_ENV="${MULE_ENV}"
 
-          PORTFOLIO_ENV = "${mwDefauls.portFolio_Env_Mappings[${PORTFOLIO_NAME}]}"
+          PORTFOLIO_ENV = "${mwDefauls.portFolio_Env_Mappings.'${PORTFOLIO_NAME}'}"
  
           RTF_CLUSTER_NAME = "${${PORTFOLIO_ENV}[${MULE_ENV}][0]}"
           //RTF_CLUSTER_NAME = "os-rtf-1"
