@@ -116,13 +116,16 @@ def call(Map pipelineParams) {
 
             def deployParams = mwDefaults.deployment_Params_Defaults
 
-            println "deployParams1: ${deployParams}"
+           // println "deployParams1: ${deployParams}"
 
             deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}",anypointEnv,"${PROJECT}")
 
-            println "deployParams2: ${deployParams}"
+            //println "deployParams2: ${deployParams}"
 
-            def clusters = deployParams['CLUSTERS']
+            def clusters = deployParams['clusters']
+
+             println "clusters: ${clusters}"
+
             //def mvnArgs = "${mwDefaults.mvnArgs}"
             //def pEnv = mwDefaults.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]
             //println "Cluster: " + pEnv["${MULE_ENV}"][0]
