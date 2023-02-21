@@ -131,7 +131,7 @@ def call(Map pipelineParams) {
 
             //println "Cluster: " + cluster
             withEnv ([
-                "MULE_ENV=${muleEnv}","ANYPOINT_ENV=${anypointEnv}","APP_NAME = ${PORTFOLIO_NAME_LOWER}-${PROJECT}-${anypoint_env}","CPU_RESERVED = ${deployParams.cpu_reserved}",
+                "MULE_ENV=${muleEnv}","ANYPOINT_ENV=${anypointEnv}","APP_NAME = ${PORTFOLIO_NAME_LOWER}-${PROJECT}-${anypointEnv}","CPU_RESERVED = ${deployParams.cpu_reserved}",
                 "CPU_LIMIT = ${deployParams.cpu_limit}",
                 "MEMORY_RESERVED = ${deployParams.memory_reserved}",
                 "REPLICAS = ${deployParams.replicas}",
