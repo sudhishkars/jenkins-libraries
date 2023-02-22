@@ -36,23 +36,23 @@ def call(Map pipelineParams) {
       }
 
 
-      stage('Pacakge') {        
-        steps {
-          echo "Branch -- ${env.GIT_BRANCH}"
-          //sh "mvn ${mwDefaults.mvnArgs} -U clean compile"
-          sh 'mvn $MVN_ARGS -U  clean package' 
-        }    
-      }
+      // stage('Pacakge') {        
+      //   steps {
+      //     echo "Branch -- ${env.GIT_BRANCH}"
+      //     //sh "mvn ${mwDefaults.mvnArgs} -U clean compile"
+      //     sh 'mvn $MVN_ARGS -U  clean package' 
+      //   }    
+      // }
 
-      stage('Test') {
-        when {
-          expression { "${RUN_TESTS}" == 'true' }
-        }
-        steps {
-          //sh "mvn ${mwDefaults.mvnArgs} -U test"
-          sh 'mvn $MVN_ARGS -U  test' 
-        }
-      }
+      // stage('Test') {
+      //   when {
+      //     expression { "${RUN_TESTS}" == 'true' }
+      //   }
+      //   steps {
+      //     //sh "mvn ${mwDefaults.mvnArgs} -U test"
+      //     sh 'mvn $MVN_ARGS -U  test' 
+      //   }
+      // }
 
       stage('Publish to Exchange') {
         when {
