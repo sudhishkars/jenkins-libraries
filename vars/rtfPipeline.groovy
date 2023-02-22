@@ -98,7 +98,7 @@ def call(Map pipelineParams) {
             deployProfile = deployParams.deploy_profile
 
             withEnv ([
-                "ANYPOINT_URI=${deployParams.anypoint_uri}"
+                "ANYPOINT_URI=${deployParams.anypoint_uri}",
                 "MULE_ENV=${muleEnv}",
                 "ANYPOINT_ENV=${anypointEnv}",
                 "APP_NAME= ${PORTFOLIO_NAME_LOWER}-${PROJECT}-${anypointEnv}",
