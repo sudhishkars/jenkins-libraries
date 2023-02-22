@@ -1,4 +1,7 @@
 def call(Map pipelineParams) {
+
+  def deployProfile = "rtf"     
+
   pipeline {
     agent any
 
@@ -7,10 +10,6 @@ def call(Map pipelineParams) {
     }
 
     environment {
-
-      //Maven settings XML
-      // MAVEN_SETTINGS_XML=credentials('mvn-settings')
-
       PORTFOLIO_NAME="${pipelineParams.portfolio}"
       PORTFOLIO_NAME_LOWER="${PORTFOLIO_NAME.toLowerCase()}" 
       PROJECT="${pipelineParams.projectName}"    
@@ -21,91 +20,64 @@ def call(Map pipelineParams) {
       MVN_ARGS = "${mwDefaults.mvnArgs}"
     }
 
-    
-
     stages {
 
+      stage('init') {
+        steps {
+          script {
 
-      // stage('Compile') {        
-      //   steps {
-      //     echo "Branch -- ${env.GIT_BRANCH}"
-      //     sh "mvn ${mwDefaults.mvnArgs} -U clean compile"
-      //   }    
-      // }
+            def deployParams1 = mwDefaults.deployment_Params_Defaults
 
-      // stage('Test') {
-      //   when {
-      //     expression { "${RUN_TESTS}" == 'true' }
-      //   }
-      //   steps {
-      //     sh "mvn ${mwDefaults.mvnArgs} -U test"
-      //   }
-      // }
+            deployUtils.getDeploymentConfigs(deployParams1,"${PORTFOLIO_NAME_LOWER}","dev1","${PROJECT}")  
 
-      // stage('Publish to Exchange') {
-      //   steps {
-      //     script {
-      //       // withCredentials([file(credentialsId: "mvn-settings", variable: 'MAVEN_SETTINGS_XML')]) {
-      //       //   sh 'mvn -s $MAVEN_SETTINGS_XML -B -U -PExchange deploy -DskipTests'
-      //       // }
-      //       sh "mvn ${mwDefaults.mvnArgs} -U -Pexchange deploy -DskipTests"
-      //     }
-      //   }
-      // }
+            deployProfile =  deployParams1.deploy_profile        
+          }
+        }
+      }
+
+
+      stage('Compile') {        
+        steps {
+          echo "Branch -- ${env.GIT_BRANCH}"
+          //sh "mvn ${mwDefaults.mvnArgs} -U clean compile"
+          sh
+        }    
+      }
+
+      stage('Test') {
+        when {
+          expression { "${RUN_TESTS}" == 'true' }
+        }
+        steps {
+          //sh "mvn ${mwDefaults.mvnArgs} -U test"
+          sh 'mvn $MVN_ARGS -U  test' 
+        }
+      }
+
+      stage('Publish to Exchange') {
+        when {
+          anyOf {
+            branch 'develop'
+            branch 'master'
+            branch 'release/*'
+          }
+        }        
+        steps {
+          script {
+            sh 'mvn $MVN_ARGS -U  -P$deployProfile deploy -DskipTests'                    
+            //sh "mvn ${mwDefaults.mvnArgs} -U -P$deployProfile deploy -DskipTests"
+          }
+        }
+      }
 
       stage('Deploy to RTF Dev1') {
         when {
           allOf { 
-            expression { "${env.GIT_BRANCH}" == 'develop' }
+            branch 'develop'
+            //expression { "${env.GIT_BRANCH}" == 'develop' }
             expression { "${IS_PRODUCTION}" == 'false' }
           }
         }
-        // environment {
-        //   MULE_ENV="dev1"
-        //   ANYPOINT_ENV="${MULE_ENV}"
-
-        //   //PORTFOLIO_ENV = "${mwDefaults.portFolio_Env_Mappings[PORTFOLIO_NAME]}"
-
-        //   DEPLOY_PARAMS="${deployUtils.getDeploymentConfigs(mwDefaults.deployment_Params_Defaults, 
-        //             PORTFOLIO_NAME_LOWER,ANYPOINT_DEV,PROJECT)}"
-          
- 
-        //   // RTF_CLUSTER_NAME = "${mwDefaults.portFolio_Env_Mappings[PORTFOLIO_NAME][MULE_ENV][0]}"
-
-        //   // CPU_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.cpu_reserved}"
-        //   // CPU_LIMIT = "${mwDefaults.DEV1_Resource_Defaults.cpu_limit}"
-        //   // MEMORY_RESERVED = "${mwDefaults.DEV1_Resource_Defaults.memory_reserved}"
-        //   // REPLICAS = "${mwDefaults.DEV1_Resource_Defaults.replicas}"  
-
-        //   // MULE_VERSION = "${mwDefaults.deployment_Params_Defaults.muleVersion}"
-        //   // RTF_PROVIDER = "${mwDefaults.deployment_Params_Defaults.provider}"
-        //   // SKIP_DEPLOY_VERIFY = "${mwDefaults.deployment_Params_Defaults.skipDeployVerification}"
-
-        //   // ENFORCE_REPLICAS_ACROSS_NODES = "${mwDefaults.deployment_Params_Defaults.enforceReplicasAcrossNodes}"
-        //   // UPDATE_STRATEGY = "${mwDefaults.deployment_Params_Defaults.updateStrategy}"
-        //   // CLUSTERED = "${mwDefaults.deployment_Params_Defaults.clustered}"
-        //   // FORWARD_SSL_SESSION = "${mwDefaults.deployment_Params_Defaults.forwardSSLSession}"
-        //   // LAST_MILE_SECURITY = "${mwDefaults.deployment_Params_Defaults.lastMileSecurity}"
-        //   // PERSISTENT_OBJECT_STORE = "${mwDefaults.deployment_Params_Defaults.persistentObjectStore}"     
-
-        //   CPU_RESERVED = "${deployParams.cpu_reserved}"
-        //   CPU_LIMIT = "${deployParams.cpu_limit}"
-        //   MEMORY_RESERVED = "${deployParams.memory_reserved}"
-        //   REPLICAS = "${deployParams.replicas}"  
-
-        //   MULE_VERSION = "${deployParams.mule_version}"
-        //   RTF_PROVIDER = "${deployParams.provider}"
-        //   SKIP_DEPLOY_VERIFY = "${deployParams.skip_deploy_verify}"
-
-        //   ENFORCE_REPLICAS_ACROSS_NODES = "${deployParams.enforce_replicas_across_nodes}"
-        //   UPDATE_STRATEGY = "${deployParams.update_strategy}"
-        //   CLUSTERED = "${deployParams.clustered}"
-        //   FORWARD_SSL_SESSION = "${deployParams.forward_ssl_session}"
-        //   LAST_MILE_SECURITY = "${deployParams.last_mile_security}"
-        //   PERSISTENT_OBJECT_STORE = "${deployParams.persistent_object_store}"                  
-
-        //   APP_NAME = "${PORTFOLIO_NAME_LOWER}-${PROJECT}-${ANYPOINT_ENV}"           
-        // }
         steps {
           script {
             //def appName = "${PORTFOLIO_NAME_LOWER}-${pipelineParams.projectName}-${ANYPOINT_ENV}"
@@ -116,23 +88,12 @@ def call(Map pipelineParams) {
 
             def deployParams = mwDefaults.deployment_Params_Defaults
 
-           // println "deployParams1: ${deployParams}"
-
             deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}",anypointEnv,"${PROJECT}")
-
-            //println "deployParams2: ${deployParams}"
 
             def clusters = deployParams['clusters']
 
-             println "clusters: ${clusters}"
+            deployProfile = deployParams.deploy_profile
 
-            //def mvnArgs = "${mwDefaults.mvnArgs}"
-            //def pEnv = mwDefaults.portFolio_Env_Mappings["${PORTFOLIO_NAME}"]
-            //println "Cluster: " + pEnv["${MULE_ENV}"][0]
-            
-            //println "RTF Cluster:  ${RTF_CLUSTER_NAME}"
-
-            //println "Cluster: " + cluster
             withEnv ([
                 "MULE_ENV=${muleEnv}",
                 "ANYPOINT_ENV=${anypointEnv}",
@@ -159,7 +120,7 @@ def call(Map pipelineParams) {
                       println "REPLICAS: ${REPLICAS}, CPU_RESERVED Env: ${CPU_RESERVED}, CPU_LIMIT: ${CPU_LIMIT}"
                       for (cluster in clusters)   { 
                         println "Deploying to Cluster: " + cluster
-                        //sh 'mvn $MVN_ARGS -Prtf mule:deploy -Dmule.artifact=dummy.jar -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key -Drtf.cluster=$cluster'
+                        sh 'mvn $MVN_ARGS -P$deployProfile mule:deploy -Dmule.artifact=dummy.jar -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key -Drtf.cluster=$cluster'
                       }
                   }                     
                 }
