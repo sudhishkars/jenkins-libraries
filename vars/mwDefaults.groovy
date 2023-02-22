@@ -39,12 +39,12 @@ import groovy.transform.Field
 // ]
 
 @Field Map artifact_repo_defaults = [
-    default_profile: "exchange",
+    profile: "exchange",
     rtf: "exchange",
     hybrid: "nexus"
 ]
 
-@Field Map deployment_Params_Constants = [
+@Field Map deployment_params_constants = [
     provider: "MC",
     last_mile_security: "false",
     forward_ssl_session: "false",
@@ -54,7 +54,7 @@ import groovy.transform.Field
 ]
 
 
-@Field Map deployment_Params_Defaults = [
+@Field Map deployment_params_defaults = [
     //anypoint_url: "https://anypoint.mulesoft.com",
     clusters: [""],
     deploy_profile: "rtf",

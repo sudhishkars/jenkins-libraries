@@ -1,7 +1,7 @@
 def call(Map pipelineParams) {
 
-  def deployProfile = mwDefaults.deployment_Params_Defaults.default_profile
-  def repoProfile = mwDefaults.artifact_repo_defaults.deploy_profile
+  def deployProfile = mwDefaults.deployment_params_defaults.deploy_profile
+  def repoProfile = mwDefaults.artifact_repo_defaults.profile
 
   pipeline {
     agent any
@@ -89,7 +89,7 @@ def call(Map pipelineParams) {
             def muleEnv = "dev1"
             def anypointEnv = muleEnv
 
-            def deployParams = mwDefaults.deployment_Params_Defaults
+            def deployParams = mwDefaults.deployment_params_defaults
 
             deployUtils.getDeploymentConfigs(deployParams,"${PORTFOLIO_NAME_LOWER}",anypointEnv,"${PROJECT}")
 
