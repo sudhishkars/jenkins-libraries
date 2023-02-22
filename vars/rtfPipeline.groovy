@@ -36,11 +36,11 @@ def call(Map pipelineParams) {
       }
 
 
-      stage('Compile') {        
+      stage('Pacakge') {        
         steps {
           echo "Branch -- ${env.GIT_BRANCH}"
           //sh "mvn ${mwDefaults.mvnArgs} -U clean compile"
-          sh
+          sh 'mvn $MVN_ARGS -U  clean package' 
         }    
       }
 
