@@ -98,6 +98,7 @@ def call(Map pipelineParams) {
             deployProfile = deployParams.deploy_profile
 
             withEnv ([
+                "ANYPOINT_URI=${deployParams.anypoint_uri}"
                 "MULE_ENV=${muleEnv}",
                 "ANYPOINT_ENV=${anypointEnv}",
                 "APP_NAME= ${PORTFOLIO_NAME_LOWER}-${PROJECT}-${anypointEnv}",
@@ -124,7 +125,7 @@ def call(Map pipelineParams) {
                       println "REPLICAS: ${REPLICAS}, CPU_RESERVED Env: ${CPU_RESERVED}, CPU_LIMIT: ${CPU_LIMIT}"
                       for (cluster in clusters)   { 
                         println "Deploying to Cluster: " + cluster
-                        sh 'mvn $MVN_ARGS -P$DEPLOY_PROFILE mule:deploy -Dmule.artifact=dummy.jar -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key -Drtf.cluster=$cluster'
+                        sh 'mvn $MVN_ARGS -P$DEPLOY_PROFILE mule:deploy -Dmule.artifact=dummy.jar -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key -Drtf.cluster='+cluster
                       }
                   }                     
                 }
