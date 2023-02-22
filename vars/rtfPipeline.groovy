@@ -54,7 +54,7 @@ def call(Map pipelineParams) {
       //   }
       // }
 
-      stage('Publish to Exchange') {
+      stage('Publish to Artifact Repository') {
         when {
           anyOf {
             branch 'develop'
@@ -64,8 +64,10 @@ def call(Map pipelineParams) {
         }        
         steps {
           script {
-            println 'Deploy Profile: $deployProfile ' + deployProfile
-            sh 'mvn $MVN_ARGS -U  -P$deployProfile deploy -DskipTests'                    
+            println 'Deploy Profile: ' + deployProfile
+            withEnv (["DEPLOY_PROFILE=${deployProfile}"]) {
+              sh 'mvn $MVN_ARGS -U  -P$DEPLOY_PROFILE deploy -DskipTests'
+            }                    
             //sh "mvn ${mwDefaults.mvnArgs} -U -P$deployProfile deploy -DskipTests"
           }
         }
@@ -111,7 +113,8 @@ def call(Map pipelineParams) {
                 "CLUSTERED=${deployParams.clustered}",
                 "FORWARD_SSL_SESSION=${deployParams.forward_ssl_session}",
                 "LAST_MILE_SECURITY=${deployParams.last_mile_security}",
-                "PERSISTENT_OBJECT_STORE=${deployParams.persistent_object_store}"
+                "PERSISTENT_OBJECT_STORE=${deployParams.persistent_object_store}",
+                "DEPLOY_PROFILE=${deployProfile}"
             ]) {
                   withCredentials([
                     usernamePassword(credentialsId: "${PORTFOLIO_NAME_LOWER}-${MULE_ENV}-creds", usernameVariable: 'ap_user', passwordVariable: 'ap_pass'),
@@ -121,7 +124,7 @@ def call(Map pipelineParams) {
                       println "REPLICAS: ${REPLICAS}, CPU_RESERVED Env: ${CPU_RESERVED}, CPU_LIMIT: ${CPU_LIMIT}"
                       for (cluster in clusters)   { 
                         println "Deploying to Cluster: " + cluster
-                        sh 'mvn $MVN_ARGS -P$deployProfile mule:deploy -Dmule.artifact=dummy.jar -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key -Drtf.cluster=$cluster'
+                        sh 'mvn $MVN_ARGS -P$DEPLOY_PROFILE mule:deploy -Dmule.artifact=dummy.jar -Danypoint.env.clientId=$ap_user -Danypoint.env.clientSecret=$ap_pass -Dsecret.key=$key -Drtf.cluster=$cluster'
                       }
                   }                     
                 }
