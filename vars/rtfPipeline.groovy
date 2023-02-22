@@ -26,7 +26,7 @@ def call(Map pipelineParams) {
       stage('init') {
         steps {
           script {
-
+            println 'Deploy Profile: ' + deployProfile
             deployUtils.getDeploymentProile(deployProfile,"${PORTFOLIO_NAME_LOWER}","${PROJECT}")    
             println 'Deploy Profile: ' + deployProfile
             repoProfile = mwDefaults.artifact_repo_defaults[deployProfile]
