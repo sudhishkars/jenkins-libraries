@@ -38,6 +38,11 @@ import groovy.transform.Field
 //     replicas: 1
 // ]
 
+@Field Map artifact_repo_defaults = [
+    default_profile: "exchange",
+    rtf: "exchange",
+    hybrid: "nexus"
+]
 
 @Field Map deployment_Params_Constants = [
     provider: "MC",

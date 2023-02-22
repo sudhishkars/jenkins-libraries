@@ -1,6 +1,7 @@
 def call(Map pipelineParams) {
 
-  def deployProfile = "rtf"     
+  def deployProfile = mwDefaults.deployment_Params_Defaults.default_profile
+  def repoProfile = mwDefaults.artifact_repo_defaults.deploy_profile
 
   pipeline {
     agent any
@@ -26,11 +27,9 @@ def call(Map pipelineParams) {
         steps {
           script {
 
-            def deployParams1 = mwDefaults.deployment_Params_Defaults
-
-            deployUtils.getDeploymentConfigs(deployParams1,"${PORTFOLIO_NAME_LOWER}","dev1","${PROJECT}")  
-
-            deployProfile =  deployParams1.deploy_profile        
+            deployUtils.getDeploymentProile(deployProfile,"${PORTFOLIO_NAME_LOWER}","${PROJECT}")    
+            println 'Deploy Profile: ' + deployProfile
+            repoProfile = mwDefaults.artifact_repo_defaults[deployProfile]
           }
         }
       }
@@ -65,8 +64,9 @@ def call(Map pipelineParams) {
         steps {
           script {
             println 'Deploy Profile: ' + deployProfile
-            withEnv (["DEPLOY_PROFILE=${deployProfile}"]) {
-              sh 'mvn $MVN_ARGS -U  -P$DEPLOY_PROFILE deploy -DskipTests'
+            println 'Repo Profile: ' + repoProfile
+            withEnv (["REPO_PROFILE=${repoProfile}"]) {
+              sh 'mvn $MVN_ARGS -U  -P$REPO_PROFILE deploy -DskipTests'
             }                    
             //sh "mvn ${mwDefaults.mvnArgs} -U -P$deployProfile deploy -DskipTests"
           }
