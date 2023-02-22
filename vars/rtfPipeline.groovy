@@ -64,6 +64,7 @@ def call(Map pipelineParams) {
         }        
         steps {
           script {
+            println 'Deploy Profile: $deployProfile ' + deployProfile
             sh 'mvn $MVN_ARGS -U  -P$deployProfile deploy -DskipTests'                    
             //sh "mvn ${mwDefaults.mvnArgs} -U -P$deployProfile deploy -DskipTests"
           }
